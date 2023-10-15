@@ -5,15 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
 
 public class GraphDraw {
     public static void main(String[] args) {
@@ -56,7 +47,7 @@ class CircleDrawingPanel extends JPanel {
                 int number = circles.size() + 1;
                 CircleInfo circleInfo = new CircleInfo(point, number);
                 circles.add(circleInfo);
-                repaint();
+                repaint(); 
             }
         });
     }

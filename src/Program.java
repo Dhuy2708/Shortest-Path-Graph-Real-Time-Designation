@@ -1,6 +1,8 @@
 import java.awt.EventQueue;
 import javax.swing.UIManager;
-import View.GraphForm;
+
+import View.InputGraph.DesignGraphPanel;
+import View.OutputGraph.OutputGraphForm;
 
 public class Program {
 
@@ -9,8 +11,8 @@ public class Program {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GraphForm frame = new GraphForm();
-					frame.setVisible(true);
+					DesignGraphPanel form = new DesignGraphPanel();
+					form.displayForm();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

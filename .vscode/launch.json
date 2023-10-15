@@ -1,0 +1,126 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "OutputGraphForm",
+            "request": "launch",
+            "mainClass": "View.OutputGraph.OutputGraphForm",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "OuputGraphForm",
+            "request": "launch",
+            "mainClass": "View.OutputGraph.OuputGraphForm",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "GraphDraw",
+            "request": "launch",
+            "mainClass": "Controller.GraphDraw",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "Program",
+            "request": "launch",
+            "mainClass": "Program",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "TestAlgorithm",
+            "request": "launch",
+            "mainClass": "TestAlgorithm",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "CircleLineDrawer",
+            "request": "launch",
+            "mainClass": "View.CircleLineDrawer",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "DesignGraphPanel",
+            "request": "launch",
+            "mainClass": "View.DesignGraph.DesignGraphPanel",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "InputGraphForm",
+            "request": "launch",
+            "mainClass": "View.InputGraph.InputGraphForm",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "GraphForm",
+            "request": "launch",
+            "mainClass": "View.OutputGraph.GraphForm",
+            "projectName": "pbl4"
+        },
+        {
+            "type": "java",
+            "name": "GraphDraw(1)",
+            "request": "launch",
+            "mainClass": "Controller.GraphDraw",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "Program(1)",
+            "request": "launch",
+            "mainClass": "Program",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "TestAlgorithm(1)",
+            "request": "launch",
+            "mainClass": "TestAlgorithm",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CircleLineDrawer(1)",
+            "request": "launch",
+            "mainClass": "View.CircleLineDrawer",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "DesignGraphPanel(1)",
+            "request": "launch",
+            "mainClass": "View.DesignGraph.DesignGraphPanel",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "InputGraphForm(1)",
+            "request": "launch",
+            "mainClass": "View.InputGraph.InputGraphForm",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "GraphForm(1)",
+            "request": "launch",
+            "mainClass": "View.OutputGraph.GraphForm",
+            "projectName": "src"
+        }
+    ]
+}

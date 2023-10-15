@@ -1,14 +1,33 @@
 package Model;
 
+import java.awt.Point;
 
 public class Node {
     private String name;
+    private Point point;
     private int distance = Integer.MAX_VALUE;
     private boolean isPermanent = false;
     private Node previousNode = null;
 
+    public Node(){
+
+    }
+
+    public Node(Point point , String name) {
+        this.point = point;
+        this.name = name;
+    }
+
     public Node(String name) {
         this.name = name;
+    }
+
+    public Point getPoint(){
+        return this.point;
+    }
+
+    public void setPoint(Point p){
+        this.point = p;
     }
 
     public String getName(){

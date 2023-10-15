@@ -1,5 +1,6 @@
 package Controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,8 @@ public class GraphController {
     }
 
     // Trả về đường đi từ nút nguồn đến nút đích
-    public static List<Node> getShortestPath(Node source, Node destination) {
-        List<Node> path = new ArrayList<>();
+    public static ArrayList<Node> getShortestPath(Node source, Node destination) {
+        ArrayList<Node> path = new ArrayList<>();
         Node current = destination;
 
         while (current != null) {
