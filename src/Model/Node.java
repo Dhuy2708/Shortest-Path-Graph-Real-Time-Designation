@@ -61,5 +61,11 @@ public class Node {
     public void setPrevNode(Node prevNode){
         this.previousNode = prevNode;
     }
+
+    public void setDefault(){
+        this.distance = Integer.MAX_VALUE;
+        this.isPermanent = false;
+        this.previousNode = null;
+    }
     
 }

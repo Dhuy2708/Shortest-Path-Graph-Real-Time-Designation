@@ -166,8 +166,21 @@ public class OutputGraphForm extends JFrame {
 					GraphController.shortestPath(graph, startNode);
 					shortestPath = GraphController.getShortestPath(startNode, endNode);
 
+					graphPanel.setData(graph, shortestPath);
 					repaint();
 
+					//Distance textfield
+					distanceTextField.setText(String.valueOf(endNode.getDistance()));
+					
+					//Route textfield
+					String route = "";
+					for(int i = 0; i < shortestPath.size(); i++){
+						if(i != shortestPath.size() - 1)
+							route += shortestPath.get(i).getName() + " -> ";
+						else
+							route += shortestPath.get(i).getName();
+					}
+					routeTextField.setText(route);
 				}
 			}
 		});
@@ -175,14 +188,19 @@ public class OutputGraphForm extends JFrame {
 }
 
 class graphPanel extends JPanel{
-	private Graph graph = new Graph();
-	private ArrayList<Node> shortestPath = new ArrayList<>();
+	private Graph graph;
+	private ArrayList<Node> shortestPath ;
 
 	private int nodeRadius = 15;
 
 	public graphPanel(Graph data, ArrayList<Node> shortestPath){
 		this.graph = data;
 		this.shortestPath = shortestPath;
+	}
+
+	public void setData(Graph graphDatam, ArrayList<Node> shortestPathData){
+		this.graph = graphDatam;
+		this.shortestPath = shortestPathData;
 	}
 
 	@Override
@@ -204,14 +222,14 @@ class graphPanel extends JPanel{
 		//Draw shortest path
 		if(shortestPath.size() > 0){
 			for(int i = 0; i < shortestPath.size() - 1; i++){
-				Point startPoint = shortestPath.get(i).getPoint();
-				Point endPoint = shortestPath.get(i + 1).getPoint();
+				Point sourcePoint = shortestPath.get(i).getPoint();
+				Point desitnyPoint = shortestPath.get(i + 1).getPoint();
 
 				g.setColor(Color.MAGENTA);
 
-				g.drawLine((int)startPoint.getX(), (int)startPoint.getY() - 1, (int)endPoint.getX(), (int)endPoint.getY() - 1);
-				g.drawLine((int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY());
-				g.drawLine((int)startPoint.getX(), (int)startPoint.getY() + 1, (int)endPoint.getX(), (int)endPoint.getY() + 1);
+				g.drawLine((int)sourcePoint.getX(), (int)sourcePoint.getY() - 1, (int)desitnyPoint.getX(), (int)desitnyPoint.getY() - 1);
+				g.drawLine((int)sourcePoint.getX(), (int)sourcePoint.getY(), (int)desitnyPoint.getX(), (int)desitnyPoint.getY());
+				g.drawLine((int)sourcePoint.getX(), (int)sourcePoint.getY() + 1, (int)desitnyPoint.getX(), (int)desitnyPoint.getY() + 1);
 
 
 			}

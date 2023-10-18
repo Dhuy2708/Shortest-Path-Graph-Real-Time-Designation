@@ -19,7 +19,7 @@ public class DesignGraphPanel {
     public static JTextArea textArea = new JTextArea();
 
     public static void main(String[] args) {
-   
+        
     }
 
     public void displayForm(){

@@ -34,7 +34,7 @@ public class Graph {
         Node nodeToReturn = new Node();
         Boolean isExist = false;
         for(Map.Entry<Node, Map<Node, Integer>> node : this.adjacencyList.entrySet()){
-            if(node.getKey().getName() == name){
+            if(node.getKey().getName().equals(name)){
                 nodeToReturn = node.getKey();
                 isExist = true;
                 break;
@@ -47,12 +47,18 @@ public class Graph {
     public Boolean isNodeNameExist(String name){
         Boolean isExist = false;
         for(Map.Entry<Node, Map<Node, Integer>> node : this.adjacencyList.entrySet()){
-            if(node.getKey().getName() == name){
+            if(node.getKey().getName().equals(name)){
                 isExist = true;
                 break;
             }
         }
         return isExist;
+    }
+
+    public void resetGraph(){
+        for(Map.Entry<Node, Map<Node, Integer>> node : this.adjacencyList.entrySet()){
+            node.getKey().setDefault();
+        }
     }
 
 }

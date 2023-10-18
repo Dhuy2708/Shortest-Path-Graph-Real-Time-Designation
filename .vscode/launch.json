@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DesignGraphPanel",
+            "request": "launch",
+            "mainClass": "View.InputGraph.DesignGraphPanel",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "OutputGraphForm",
             "request": "launch",
             "mainClass": "View.OutputGraph.OutputGraphForm",

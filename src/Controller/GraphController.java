@@ -11,9 +11,12 @@ import Model.*;
 public class GraphController {
     // Thuật toán định đường ngắn nhất
     public static void shortestPath(Graph graph, Node source) {
+        graph.resetGraph();
         source.setDistance(0);
+        
 
         while (true) {
+
             Node currentNode = null;
             int currentMinDistance = Integer.MAX_VALUE;
 
@@ -46,9 +49,13 @@ public class GraphController {
 
         while (current != null) {
             path.add(0, current);
+
+            if(current == source) break;
+
             current = current.getPrevNode();
         }
 
         return path;
     }
+
 }

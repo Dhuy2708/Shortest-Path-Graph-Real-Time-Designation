@@ -5,7 +5,7 @@ import View.InputGraph.DesignGraphPanel;
 import View.OutputGraph.OutputGraphForm;
 
 public class Program {
-
+	
 	public static void main(String[] args) {
 		
 		EventQueue.invokeLater(new Runnable() {
