@@ -1,6 +1,8 @@
 package Model;
 
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.Random;
 
 public class Node {
     private String name;
@@ -10,7 +12,7 @@ public class Node {
     private Node previousNode = null;
 
     public Node(){
-
+        point = new Point();
     }
 
     public Node(Point point , String name) {
@@ -66,6 +68,17 @@ public class Node {
         this.distance = Integer.MAX_VALUE;
         this.isPermanent = false;
         this.previousNode = null;
+    }
+    
+    public void setRandomNode(Rectangle rec, String name){
+        Random random = new Random();
+
+        int randX = random.nextInt((int)rec.getWidth()) + rec.x;
+        int randY = random.nextInt((int)rec.getHeight()) + rec.y;
+
+        this.point.x = randX;
+        this.point.y = randY;
+        this.name = name;
     }
     
 }

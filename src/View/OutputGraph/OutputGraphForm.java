@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.CompoundBorder;
 
+//Form để điều khiển (tìm đường đi ngắn nhất)
 public class OutputGraphForm extends JFrame {
 
 	private JPanel contentPane;
@@ -104,6 +105,7 @@ public class OutputGraphForm extends JFrame {
 		btnNewButton_1.setFont(new Font("Times New Roman", Font.PLAIN, 24));
 		btnNewButton_1.setBounds(725, 704, 148, 47);
 		contentPane.add(btnNewButton_1);
+
 		
 		JPanel guidePanel = new JPanel();
 		guidePanel.setBounds(32, 298, 384, 453);
@@ -187,6 +189,7 @@ public class OutputGraphForm extends JFrame {
 	}
 }
 
+//Panel hiển thị graph
 class graphPanel extends JPanel{
 	private Graph graph;
 	private ArrayList<Node> shortestPath ;

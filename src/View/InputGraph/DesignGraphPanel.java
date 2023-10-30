@@ -6,20 +6,22 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import Model.*;
 import javax.swing.border.BevelBorder;
 
 import View.OutputGraph.*;
 
-
+//Form để thiết kế đồ thị
 public class DesignGraphPanel {
 
     public static JTextField text = new JTextField();
     public static JTextArea textArea = new JTextArea();
 
     public static void main(String[] args) {
-        
+        DesignGraphPanel panel = new DesignGraphPanel();
+        panel.displayForm();
     }
 
     public void displayForm(){
@@ -59,10 +61,10 @@ public class DesignGraphPanel {
     }
 }
 
+//Panel để vẽ và thiết kế độ thị
 class setNodes extends JPanel {
     private int nodeRadius = 15;
     private ArrayList<NodeInfo> nodeList = new ArrayList<>();
-    //private Map<Node, Map<Node, Integer>> adjacencyList = new HashMap<>();
 
     private int numberOfNodesSelected = 0;
     private Node startNode;
@@ -75,10 +77,15 @@ class setNodes extends JPanel {
     }
 
     public setNodes(){
-         JButton confirmButton = new JButton("Confirm");
+
+        JButton confirmButton = new JButton("Confirm");
         confirmButton.setBounds(10, 11, 89, 23);
         this.add(confirmButton);
 
+
+        JButton randomButton = new JButton("Random");
+        randomButton.setBounds(150, 11, 89, 23);
+        this.add(randomButton);
         
 
         confirmButton.addActionListener(new ActionListener(){
@@ -97,10 +104,27 @@ class setNodes extends JPanel {
             }
         });
 
+        randomButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try{
+                    Rectangle rec = new Rectangle(50, 100, 500, 300);
+                    Random random = new Random();
+                    int nodeAmount = random.nextInt(4) + 6;
+                    graph.setRandomGraph(rec, nodeAmount);
+                    repaint();
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
+               
+            }
+        });
+
 
         addMouseListener(new MouseAdapter(){
             
-            //int numberOfNodesSelected = 0;
+            //int numberOfNodesSelected = 0;    
             boolean isInSelection = false;
             
             @Override
@@ -164,17 +188,6 @@ class setNodes extends JPanel {
 
 
                 }
-
-                //text area
-                // DesignGraphPanel.textArea.setText("");
-                // for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
-                //     DesignGraphPanel.textArea.append(node.getKey().getName() + ": ");
-
-                //     for(Map.Entry<Node, Integer> innerNode : graph.getNeighbors(node.getKey()).entrySet()){
-                //         DesignGraphPanel.textArea.append(innerNode.getKey().getName() + ", ");
-                //     }  
-                //     DesignGraphPanel.textArea.append("\n");
-                // }
             }
         });
     }
@@ -183,7 +196,6 @@ class setNodes extends JPanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
-       
         //Draw edge
         for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
             for(Map.Entry<Node, Integer> innerNode : graph.getNeighbors(node.getKey()).entrySet()){
