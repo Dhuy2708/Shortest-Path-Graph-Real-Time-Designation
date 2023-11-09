@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Model.Graph;
-import Model.Node;
-import Controller.*;
+import Shared.Model.Graph;
+import Shared.Model.Node;
+import Shared.Helper.GraphHelper.GraphShortestPath;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JTextPane;
@@ -165,8 +165,8 @@ public class OutputGraphForm extends JFrame {
 					Node endNode = new Node();
 					endNode = graph.getNodeByName(endNodeTF.getText());
 
-					GraphController.shortestPath(graph, startNode);
-					shortestPath = GraphController.getShortestPath(startNode, endNode);
+					GraphShortestPath.shortestPath(graph, startNode);
+					shortestPath = GraphShortestPath.getShortestPath(startNode, endNode);
 
 					graphPanel.setData(graph, shortestPath);
 					repaint();

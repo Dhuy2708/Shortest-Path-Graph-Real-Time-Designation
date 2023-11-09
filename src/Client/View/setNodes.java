@@ -1,91 +1,60 @@
-package View.InputGraph;
+package Client.View;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import Shared.Model.Graph;
-import Shared.Model.Node;
-
 import javax.swing.border.BevelBorder;
 
 import View.OutputGraph.*;
 
-//Form để thiết kế đồ thị
-public class DesignGraphPanel extends JFrame {
-
-    public static JTextField text = new JTextField();
-    private JTextArea textArea = new JTextArea();
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            DesignGraphPanel frame = new DesignGraphPanel();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.setVisible(true);
-        });
-    }
-
-    public DesignGraphPanel() {
-        // Khởi tạo cửa sổ JFrame
-
-        JButton clrButton = new JButton("Xóa");
-        setNodes graphPanel = new setNodes();
-        graphPanel.setBackground(new Color(255, 255, 255));
-
-        clrButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                graphPanel.clearAllNodes();
-            }
-        });
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.add(clrButton);
-        text.setHorizontalAlignment(SwingConstants.LEFT);
-        buttonPanel.add(text);
-
-        getContentPane().add(buttonPanel, BorderLayout.NORTH);
-        getContentPane().add(graphPanel);
-        graphPanel.setLayout(null);
-
-        textArea.setBounds(592, 23, 184, 123);
-        graphPanel.add(textArea);
-    }
-}
+import Shared.Model.*;
 
 //Panel để vẽ và thiết kế độ thị
-class setNodes extends JPanel {
+public class setNodes extends JPanel {
+    private JButton confirmButton;
+    private JButton randomButton;
+
     private int nodeRadius = 15;
-    private ArrayList<NodeInfo> nodeList = new ArrayList<>();
+    public ArrayList<NodeInfo> nodeList = new ArrayList<>();
 
     private int numberOfNodesSelected = 0;
     private Node startNode;
     private Node endNode = new Node();
-    HashMap<Integer, Node> nodes = new HashMap<>();
-    public Graph graph = new Graph();
+    private HashMap<Integer, Node> nodes = new HashMap<>();
+    private Graph graph = new Graph();
 
     public Graph getGraph(){
         return graph;
     }
 
+    public void SetGraph(Graph graph){
+        this.graph = graph;
+        repaint();
+    }
+
+    public int getNodeRadius(){
+        return this.nodeRadius;
+    }
+
+
     public setNodes(){
 
-        JButton confirmButton = new JButton("Confirm");
+        confirmButton = new JButton("Confirm"); //button xác nhận và gửi dữ liệu đến server
         confirmButton.setBounds(10, 11, 89, 23);
         this.add(confirmButton);
 
 
-        JButton randomButton = new JButton("Random");
+        randomButton = new JButton("Random");   //button sinh graph random
         randomButton.setBounds(150, 11, 89, 23);
         this.add(randomButton);
-        
 
+        
         confirmButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -102,24 +71,7 @@ class setNodes extends JPanel {
             }
         });
 
-        randomButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                try{
-                    Rectangle rec = new Rectangle(50, 100, 500, 300);
-                    Random random = new Random();
-                    int nodeAmount = random.nextInt(4) + 6;
-                    graph.setRandomGraph(rec, nodeAmount);
-                    repaint();
-                }
-                catch(Exception ex){
-                    ex.printStackTrace();
-                }
-               
-            }
-        });
-
-
+        //SỰ KIỆN CLICK CHUỘT => TẠO NODE VÀ GRAPH
         addMouseListener(new MouseAdapter(){
             
             //int numberOfNodesSelected = 0;    
@@ -153,10 +105,6 @@ class setNodes extends JPanel {
                             else if(numberOfNodesSelected == 2){
                                 endNode = nodes.get(node.getIndex());
 
-
-
-                                
-
                                 try{
                                     //add edge into graph
                                     graph.addEdge(startNode, endNode, (int)startNode.getPoint().distance(node.getPoint()));
@@ -166,8 +114,6 @@ class setNodes extends JPanel {
                                     ex.printStackTrace();
                                 }
 
-
-
                                 numberOfNodesSelected = 0;
 
                             }
@@ -176,7 +122,7 @@ class setNodes extends JPanel {
                         }
                         
                     }
-                    DesignGraphPanel.text.setText("selected: " + nodeSelected + " start: " + startNode.getName() + " end: " + endNode.getName());
+                    InputForm.text.setText("selected: " + nodeSelected + " start: " + startNode.getName() + " end: " + endNode.getName());
                     if(nodeSelected == false) {
                         numberOfNodesSelected = 0;
                         startNode.setName("");
@@ -188,18 +134,39 @@ class setNodes extends JPanel {
                 }
             }
         });
+        
+        //sự kiện tạo graph random
+        randomButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try{
+                    Rectangle rec = new Rectangle(50, 100, 500, 300);
+                    Random random = new Random();
+                    int nodeAmount = random.nextInt(4) + 6;
+                    graph.setRandomGraph(rec, nodeAmount);
+                    repaint();
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
+               
+            }
+        });
+
     }
 
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        //Draw edge
+        //vẽ cạnh của đồ thị, anh có thể sửa đồ họa lại cho đẹp
         for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
             for(Map.Entry<Node, Integer> innerNode : graph.getNeighbors(node.getKey()).entrySet()){
                 Point startPoinnt = node.getKey().getPoint();
                 Point endPoint = innerNode.getKey().getPoint();
 
+
+                //vẽ cạnh
                 g.setColor(Color.RED);
                 
                 g.drawLine((int)startPoinnt.getX(), (int)startPoinnt.getY() - 1, (int)endPoint.getX(), (int)endPoint.getY() - 1);
@@ -209,64 +176,53 @@ class setNodes extends JPanel {
             }  
         }
 
+        //vẽ node của đồ thị
         for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
             g.setColor(Color.DARK_GRAY);
             int x = (int)node.getKey().getPoint().getX();
             int y = (int)node.getKey().getPoint().getY();
 
-            //draw node
+            //vẽ node
             g.fillOval(x - nodeRadius, y - nodeRadius, nodeRadius * 2, nodeRadius * 2);
 
             g.setColor(Color.WHITE);
             g.drawString(node.getKey().getName(), x - 5, y + 5);
         }
-        
-
-
-
-
-        
     }
 
     public void clearAllNodes(){
         graph.getAdjacencyList().clear();
         repaint();
     }
+
+
+    //CÁC HÀM LẮNG NGHE SỰ KIỆN CỦA PANEL
+
+
+    //listener cho sự kiện click chuột
+    public void addMouseClickListener(MouseAdapter adapter){
+        this.addMouseListener(adapter);
+    }
+
+    //listener cho sự kiện nhấn nút confirm
+    public void addConfirmButtonListener(ActionListener listener){
+        this.confirmButton.addActionListener(listener);
+    }
+
+    //listener cho sự kiện nhấn nút random
+    public void addRandomButtonListener(ActionListener listener){
+        this.randomButton.addActionListener(listener);
+    }
+
+    //listener chung cho các button của panel
+    public void addGeneralButtonListener(ActionListener listener){
+        this.randomButton.addActionListener(listener);
+        this.confirmButton.addActionListener(listener);
+    }
 }
 
 
 
 
-class NodeInfo {
-    private Point point;
-    private int index;
 
-    //0: not selected, 1: start node selected, 2: end node selected
-    private int orderSelected = 0;
 
-    public NodeInfo(){
-
-    }
-
-    public NodeInfo(Point point, int index) {
-        this.point = point;
-        this.index = index;
-    }
-
-    public Point getPoint() {
-        return point;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setOrder(int orderSelected){
-        this.orderSelected = orderSelected;
-    }
-
-    public int getOrder(){
-        return this.orderSelected;
-    }
-
-}

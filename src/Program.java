@@ -12,7 +12,7 @@ public class Program {
 			public void run() {
 				try {
 					DesignGraphPanel form = new DesignGraphPanel();
-					form.displayForm();
+					//form.displayForm();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
