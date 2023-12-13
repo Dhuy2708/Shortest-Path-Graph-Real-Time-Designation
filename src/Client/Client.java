@@ -3,76 +3,79 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
+
 import Client.Controller.ClientController;
-import Client.Model.ClientModel;
 import Client.View.InputForm;
-import Shared.Helper.GraphHelper.GraphShortestPath;
-import Shared.Model.Graph;
+import Shared.Model.DataExchangeModel;
 
 //Mô hình client để tương tác với Server (gửi graph đến Server)
 public class Client {
     private Socket socket;
 
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private static final int port = 2708;
+
+    private PrintWriter out;
+    private BufferedReader in;
 
     private ClientController controller;
 
-    public static void main(String[] args){
-        Client client = new Client("localhost", 2708);
-    } 
+    public static void main(String[] args) {
+        Client client = new Client("localhost", port);
+    }
 
     public Client(String serverAddress, int serverPort) {
         try {
             socket = new Socket(serverAddress, serverPort);
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
 
-            this.controller = new ClientController(new ClientModel(), new InputForm(), this);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+
+            this.controller = new ClientController(new DataExchangeModel(), new InputForm(), this);
             this.controller.DisplayInputForm();
 
             this.ListeningFromServer();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void SendGraphToServer(Graph graph){
-        try{
-            out.writeObject(graph);
-            out.flush();
-        }
-        catch(IOException e){
+    public void SendDataToServer(String message) {
+        try {
+            out.println(message);
+            System.out.println("Data sent: " + message);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void ListeningFromServer(){
-        try{
-            while(true){
-                Graph dataFromServer = (Graph)in.readObject();
-                if(dataFromServer != null && dataFromServer instanceof Graph){
-                    this.controller.UpdateDataToClient(dataFromServer);
+    public void ListeningFromServer() throws IOException, ClassNotFoundException {
+        Thread listenThread = new Thread(() -> {
+            try {
+                while (true) {
+                    String messageFromServer = in.readLine();
+        
+                    if (messageFromServer != null) {
+                        this.controller.UpdateDataToClient(messageFromServer);
+
+                        System.out.println("Data recieved: " + messageFromServer);
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-        catch(IOException | ClassNotFoundException e){
-            e.printStackTrace();
-        }
+        });
+
+        listenThread.start();
+
     }
 
-    public ObjectInputStream getInputStream(){
+    public BufferedReader getInputStream() {
         return this.in;
     }
 
-    public void close(){
-        try {
-            out.close();
-            in.close();
-            socket.close();
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void close() throws IOException {
+        out.close();
+        in.close();
+        socket.close();
     }
 }

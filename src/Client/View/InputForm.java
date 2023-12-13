@@ -4,20 +4,10 @@ package Client.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+
 
 import Shared.Model.Graph;
-import Shared.Model.Node;
 
-import javax.swing.border.BevelBorder;
-
-import View.OutputGraph.*;
-
-import Shared.Model.*;
 
 //Form de client thiet ke graph
 public class InputForm extends JFrame {
@@ -27,12 +17,16 @@ public class InputForm extends JFrame {
     private JButton clrButton;
     private setNodes graphPanel;
 
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             InputForm frame = new InputForm();
             frame.displayForm();
-
         });
+    }
+
+    public String getStatus(){
+        return graphPanel.getStatus();
     }
 
     public setNodes getGraphPanel(){
@@ -69,6 +63,16 @@ public class InputForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 graphPanel.clearAllNodes();
+            }
+        });
+
+        graphPanel.addMouseClickListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e){
+              
+                    text.setText(graphPanel.getStatus());
+                
+                
             }
         });
 

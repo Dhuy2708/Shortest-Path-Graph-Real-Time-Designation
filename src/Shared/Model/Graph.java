@@ -1,13 +1,13 @@
 package Shared.Model;
 
-import java.awt.List;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Graph {
+public class Graph implements Serializable{
     Map<Node, Map<Node, Integer>> adjacencyList = new HashMap<>();
 
     public Map<Node, Map<Node, Integer>> getAdjacencyList(){
@@ -17,6 +17,21 @@ public class Graph {
     public void addNode(Node node) {
         if (!adjacencyList.containsKey(node))
             adjacencyList.put(node, new HashMap<>());
+    }
+
+    public void removeNode(Node nodeToRemove) {
+        if (adjacencyList.containsKey(nodeToRemove)) {
+            // Xóa nút khỏi danh sách liên kết
+            adjacencyList.remove(nodeToRemove);
+    
+            // Xóa các cạnh liền kề của nút
+            for (Node node : adjacencyList.keySet()) {
+                Map<Node, Integer> edges = adjacencyList.get(node);
+                if (edges.containsKey(nodeToRemove)) {
+                    edges.remove(nodeToRemove);
+                }
+            }
+        }
     }
 
     public void addEdge(Node from, Node to, int weight) {

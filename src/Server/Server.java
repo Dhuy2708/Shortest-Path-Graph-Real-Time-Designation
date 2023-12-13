@@ -4,16 +4,28 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-import Server.Model.ServerModel;
+import Shared.Helper.StringExcute;
+import Shared.Model.DataExchangeModel;
 import Shared.Model.Graph;
+
 
 //Mô hình phía Server nhận dữ liệu từ CLient và trả về graph với đường đi ngắn nhất
 public class Server {
     private ServerSocket serverSocket;
 
-    private static ServerModel model = new ServerModel();
+    private static final int port = 2708;
 
-    private static ArrayList<ObjectOutputStream> clients = new ArrayList<>();
+    private static DataExchangeModel model = new DataExchangeModel();
+
+    private static ArrayList<ClientHandler> clients = new ArrayList<>();
+
+    private static StringExcute stringHelper = new StringExcute();
+
+    public static void main(String[] args) {
+        Server sever = new Server(port);
+        sever.run();
+
+    }
 
     public Server(int port) {
         try {
@@ -24,82 +36,93 @@ public class Server {
         }
     }
 
-    public static void main(String[] args){
-        Server sever = new Server(2708);
-        sever.run();
-
-    }
-
-    public void run(){
-        try{
-
-            while(true){
+    public void run() {
+        try {
+            while (true) {
                 Socket clientSocket = serverSocket.accept();
+                System.out.println(clientSocket.getInetAddress() + " has connected");
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
-                
-                ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 
-                synchronized(clients){
-                    clients.add(out);
+                synchronized (clients) {
+                    clients.add(clientHandler);
                 }
-                
+
                 new Thread(clientHandler).start();
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     // GỬI DATA ĐÊN TẤT CẢ CÁC CLIENT
-    public static void SendGraphToAllClients() {
+    public static void SendDataToAllClients(String dataFromClient, ClientHandler exceptionalClient) throws IOException{
         synchronized (clients) {
-            try {
-                for (ObjectOutputStream client : clients) {
-                    client.writeObject(model.getGraph());
+            for (ClientHandler client : clients) {
+                if(!client.equals(exceptionalClient)){
+
+                    client.SendDataToCLient(dataFromClient);                
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+
+                
             }
         }
     }
 
-
-    //CLIENT HANDLER CHO MULTITHREAD
+    // CLIENT HANDLER CHO MULTITHREAD
     class ClientHandler implements Runnable {
         private Socket clientSocket;
-        private ObjectInputStream in;
-        private ObjectOutputStream out;
 
-        public ClientHandler(Socket clientSocket) {
-            this.clientSocket = clientSocket;
+        private BufferedReader in;
+        private PrintWriter out;
+
+        public ClientHandler(Socket client) {
+            try{
+                this.clientSocket = client;
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         @Override
-        public void run(){
-            try{
-                out = new ObjectOutputStream(clientSocket.getOutputStream());
-                in = new ObjectInputStream(clientSocket.getInputStream());
-
-                Graph dataFromClient;
+        public void run() {
+            try {
+               
+                String dataFromClient;
 
                 //SERVER NHẬN DỮ LIỆU VÀ XỬ LÍ Ở ĐÂY
-                while((dataFromClient = (Graph)in.readObject()) != null){
-                    model.setGraph(dataFromClient);
-                    SendGraphToAllClients();
+                while ((dataFromClient = in.readLine()) != null) {
+                    System.out.println("Data recieved: " + dataFromClient);
+
+                    DataHandler(dataFromClient);
+                    SendDataToAllClients(dataFromClient, this);
+                    
                 }
-            }
-            catch(IOException | ClassNotFoundException ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
-        public void SendGraphToCLient(Graph graph) {
+        public void DataHandler(String data){
+            Graph graph = model.getGraphData();
+
+            stringHelper.translateString(graph, data);
+
+            model.setGraphData(graph);
+        }
+
+        public void SendDataToCLient(String messageToSend) {
             try {
-                out.writeObject(graph);
-            } catch (IOException e) {
+                out.println(messageToSend);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        public PrintWriter getPrintWriter(){
+            return this.out;
         }
 
     }

@@ -2,9 +2,10 @@ package Shared.Model;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Node {
+public class Node implements Serializable {
     private String name;
     private Point point;
     private int distance = Integer.MAX_VALUE;

@@ -1,8 +1,7 @@
 import java.awt.EventQueue;
-import javax.swing.UIManager;
 
 import View.InputGraph.DesignGraphPanel;
-import View.OutputGraph.OutputGraphForm;
+
 
 public class Program {
 	

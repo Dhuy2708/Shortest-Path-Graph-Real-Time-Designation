@@ -3,13 +3,10 @@ package Client.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.border.BevelBorder;
 
 import View.OutputGraph.*;
 
@@ -21,13 +18,18 @@ public class setNodes extends JPanel {
     private JButton randomButton;
 
     private int nodeRadius = 15;
-    public ArrayList<NodeInfo> nodeList = new ArrayList<>();
 
     private int numberOfNodesSelected = 0;
-    private Node startNode;
+    private Node startNode = new Node();
     private Node endNode = new Node();
-    private HashMap<Integer, Node> nodes = new HashMap<>();
+    
+    private String status; //ĐÂY LÀ TẤT CẢ (DỮ LIỆU MESSAGE ĐỂ GỬI QUA SERVER)
+
     private Graph graph = new Graph();
+
+    public String getStatus(){
+        return this.status;
+    }
 
     public Graph getGraph(){
         return graph;
@@ -71,23 +73,23 @@ public class setNodes extends JPanel {
             }
         });
 
+
         //SỰ KIỆN CLICK CHUỘT => TẠO NODE VÀ GRAPH
         addMouseListener(new MouseAdapter(){
-            
-            //int numberOfNodesSelected = 0;    
-            boolean isInSelection = false;
+
             
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mousePressed(MouseEvent e){
 
                 //Click chuot trai, Add node
                 if(e.getButton() == MouseEvent.BUTTON1) {
                     NodeInfo point = new NodeInfo(e.getPoint(), graph.getAdjacencyList().size() + 1);
-                    nodeList.add(point); //add point vao pointlist
 
                     Node node = new Node(point.getPoint(), String.valueOf(point.getIndex()));
-                    nodes.put(graph.getAdjacencyList().size() + 1, node); //add node into nodes
                     graph.addNode(node); //add node into graph
+
+                    status = "new " + node.getName() + " " + (int)node.getPoint().getX() + " " + (int)node.getPoint().getY();
+
                     repaint();
                 }
 
@@ -95,19 +97,25 @@ public class setNodes extends JPanel {
                 else if(e.getButton() == MouseEvent.BUTTON3){
                     
                     boolean nodeSelected = false;
-                    for(NodeInfo node : nodeList){
-                        if(node.getPoint().distance(e.getPoint()) <= nodeRadius){
+                    for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
+                        
+                        if(node.getKey().getPoint().distance(e.getPoint()) <= nodeRadius){
                             numberOfNodesSelected++;
                             nodeSelected = true;
                             if(numberOfNodesSelected == 1){
-                                startNode = nodes.get(node.getIndex());
+                                startNode = node.getKey();
+
+                                status = "";
                             }
                             else if(numberOfNodesSelected == 2){
-                                endNode = nodes.get(node.getIndex());
+                                endNode = node.getKey();
 
                                 try{
                                     //add edge into graph
-                                    graph.addEdge(startNode, endNode, (int)startNode.getPoint().distance(node.getPoint()));
+                                    graph.addEdge(startNode, endNode, (int)startNode.getPoint().distance(endNode.getPoint()));
+
+                                    //status
+                                    status = "connect " + startNode.getName() + " " + endNode.getName();
                                     repaint();
                                 }
                                 catch(Exception ex){
@@ -116,17 +124,21 @@ public class setNodes extends JPanel {
 
                                 numberOfNodesSelected = 0;
 
+
                             }
                             break;
                             
                         }
+                        else{
+                            status = "";
+                        }
                         
                     }
-                    InputForm.text.setText("selected: " + nodeSelected + " start: " + startNode.getName() + " end: " + endNode.getName());
+                    //InputForm.text.setText("selected: " + nodeSelected + " start: " + startNode.getName() + " end: " + endNode.getName());
                     if(nodeSelected == false) {
                         numberOfNodesSelected = 0;
-                        startNode.setName("");
-                        endNode.setName("");
+                        // startNode.setName("");
+                        // endNode.setName("");
                     }
                     else nodeSelected = false;
 
@@ -196,7 +208,8 @@ public class setNodes extends JPanel {
     }
 
 
-    //CÁC HÀM LẮNG NGHE SỰ KIỆN CỦA PANEL
+
+    //=============CÁC HÀM LẮNG NGHE SỰ KIỆN CỦA PANEL =======================
 
 
     //listener cho sự kiện click chuột

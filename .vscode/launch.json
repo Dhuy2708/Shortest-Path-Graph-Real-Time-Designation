@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "StringExcute",
+            "request": "launch",
+            "mainClass": "Shared.Helper.StringExcute",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "Client",
             "request": "launch",
             "mainClass": "Client.Client",
