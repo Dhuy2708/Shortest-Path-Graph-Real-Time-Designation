@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1106.0" style="-fx-background-color: #38BBE9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller.ClientController">
+   <children>
+      <Pane fx:id="setNode" layoutX="138.0" layoutY="71.0" prefHeight="442.0" prefWidth="661.0" style="-fx-border-color: BLACK; -fx-border-radius: 3px; -fx-border-width: 2.5px; -fx-background-color: WHITE; -fx-background-radius: 3px;" />
+      <ToolBar layoutX="935.0" layoutY="14.0" prefHeight="43.0" prefWidth="83.0" style="-fx-border-radius: 5px; -fx-border-width: 1.5px; -fx-border-color: BLACK; -fx-background-color: WHITE;">
+        <items>
+          <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" style="-fx-border-radius: 2px; -fx-background-color: EE2E25; -fx-border-color: BLACK; -fx-border-width: 2px; -fx-background-radius: 2px;" text="LEAVE" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Cambria Bold" size="14.0" />
+               </font></Button>
+        </items>
+         <effect>
+            <Blend />
+         </effect>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </ToolBar>
+      <VBox layoutX="14.0" layoutY="71.0" prefHeight="537.0" prefWidth="114.0" style="-fx-border-color: BLACK; -fx-border-width: 2.5px; -fx-border-radius: 5px; -fx-background-color: WHITE; -fx-background-radius: 5px;" />
+      <ScrollPane layoutX="810.0" layoutY="71.0" prefHeight="537.0" prefWidth="289.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-radius: 5px; -fx-border-width: 2.5px; -fx-background-radius: 5px;">
+         <content>
+            <Pane prefHeight="535.0" prefWidth="283.0" style="-fx-background-color: WHITE;" />
+         </content>
+      </ScrollPane>
+      <Pane fx:id="setNode1" layoutX="324.0" layoutY="14.0" prefHeight="43.0" prefWidth="289.0" style="-fx-border-color: BLACK; -fx-border-radius: 3px; -fx-border-width: 2.5px; -fx-background-color: WHITE; -fx-background-radius: 3px;" />
+      <Pane fx:id="setNode11" layoutX="138.0" layoutY="520.0" prefHeight="87.0" prefWidth="661.0" style="-fx-border-color: BLACK; -fx-border-radius: 3px; -fx-border-width: 2.5px; -fx-background-color: WHITE; -fx-background-radius: 3px;">
+         <children>
+            <Button fx:id="confirmButton" layoutX="564.0" layoutY="14.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="83.0" style="-fx-border-color: black; -fx-background-color: #07EA78; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Confirm">
+               <font>
+                  <Font name="Dubai Bold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</Pane>

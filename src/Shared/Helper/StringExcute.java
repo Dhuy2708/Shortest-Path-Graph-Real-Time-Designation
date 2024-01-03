@@ -13,31 +13,37 @@ public class StringExcute {
 
         Graph graph = new Graph();
 
-        excute.translateString(graph, "new 1 100 100");
-        excute.translateString(graph, "new 2 200 200");
+        excute.translateString(graph, "new 1 300 300");
+        excute.translateString(graph, "new 2 400 400");
 
-        Node startNode = new Node();
-        Node enNode = new Node();
+        // Node startNode = new Node();
+        // Node enNode = new Node();
         
 
         excute.translateString(graph, "connect 1 2");
+        //excute.translateString(graph, "delete 1");
 
         InputForm frame = new InputForm();
         frame.setGraph(graph);
 
-        frame.setVisible(true);
+        frame.displayForm();
+
+        System.out.println(excute.exportString(graph));
     }
 
     public void translateString(Graph graph, String message){
         String[] arr = message.split(" ");
 
         switch(arr[0]){
+            //new 'point_name' + 'x' + 'y'
             case "new":
                 Point point = new Point(Integer.parseInt(arr[2]), Integer.parseInt(arr[3]));
                 Node node = new Node(point, arr[1]);
 
                 graph.addNode(node);
                 break;
+
+            //delete 'point_name'
             case "delete":
                 Node nodeToDelete = new Node();
 
@@ -51,6 +57,8 @@ public class StringExcute {
             
                 graph.removeNode(nodeToDelete);
                 break;
+
+            //connect 'point_name' + 'point_name'
             case "connect":
                 Node startNode = new Node(), endNode = new Node();
 
@@ -67,6 +75,25 @@ public class StringExcute {
 
                 break;
         }
+    }
+
+    public String exportString(Graph graph){
+        StringBuilder strBuilder = new StringBuilder("");
+
+        for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
+            Node tmp = node.getKey();
+            strBuilder.append("new " + tmp.getName() + " " + (int)tmp.getPoint().getX() + " " + (int)tmp.getPoint().getY() + "\n");
+        }
+
+        for(Map.Entry<Node, Map<Node, Integer>> node : graph.getAdjacencyList().entrySet()){
+            Node tmp = node.getKey();
+            for(Map.Entry<Node, Integer> innerNode : node.getValue().entrySet()){
+                Node innerNodeTmp = innerNode.getKey();
+                strBuilder.append("connect " + tmp.getName() + " " + innerNodeTmp.getName() + "\n");
+            }
+        }
+
+        return strBuilder.toString();
     }
 }
 

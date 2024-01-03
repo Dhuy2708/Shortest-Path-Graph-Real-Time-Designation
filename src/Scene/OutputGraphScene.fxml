@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="571.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller.OutputGraphController">
+   <children>
+      <Pane fx:id="outputGraphPane" layoutX="15.0" layoutY="14.0" prefHeight="362.0" prefWidth="542.0" style="-fx-border-radius: 3px; -fx-border-color: BLACK; -fx-border-width: 2.5px; -fx-background-color: WHITE; -fx-background-radius: 5px;" />
+      <Button fx:id="okButton" layoutX="243.0" layoutY="486.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="84.0" style="-fx-background-radius: 5px;" text="Button" />
+      <TextField fx:id="endNodeTextField" alignment="CENTER" layoutX="345.0" layoutY="402.0" prefHeight="44.0" prefWidth="66.0" promptText="End" style="-fx-border-color: BLACK; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 1.5px;">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="startNodeTextField" alignment="CENTER" layoutX="158.0" layoutY="402.0" prefHeight="44.0" prefWidth="66.0" promptText="Start" style="-fx-border-color: BLACK; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 1.5px;">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+      </TextField>
+      <Text fx:id="infoTF" fill="#ff4646" layoutX="80.0" layoutY="469.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="411.99999237060547">
+         <font>
+            <Font name="Arial Italic" size="14.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

@@ -1,123 +1,128 @@
 package Client.View;
 
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
+import java.awt.Point;
+import java.util.concurrent.CountDownLatch;
 
 import Shared.Model.Graph;
+import Shared.Model.Node;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 
 //Form de client thiet ke graph
-public class InputForm extends JFrame {
 
-    public static JTextField text = new JTextField();   //này để hiển thị hành động của client(node bắt đầu và node kết thúc client đã chọn)
-    private JTextArea textArea = new JTextArea();
-    private JButton clrButton;
-    private setNodes graphPanel;
+public class InputForm extends Application {
+    private setNodes setNodesPane;
+    public static final CountDownLatch latch = new CountDownLatch(1);
+    public static InputForm inputForm = null;
 
+    public static InputForm waitForInputForm(){
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return inputForm;
+    }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            InputForm frame = new InputForm();
-            frame.displayForm();
-        });
+    public static void setInputForm(InputForm inputForm0) {
+        inputForm = inputForm0;
+        latch.countDown();
+    }
+
+    public InputForm(){
+        setNodesPane = new setNodes();
+        setInputForm(this);
+    }
+
+    @Override
+    public void start(Stage primaryStage){
+        try{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene/InputGraphScene.fxml"));
+            
+            Parent root = loader.load();
+    
+            Scene scene = new Scene(root);
+    
+            // Button deleteButton = (Button)scene.lookup("#deleteButton");
+            // Pane setNode = (Pane)scene.lookup("#setNode");
+    
+            
+            // if(deleteButton != null){
+            //     deleteButton.setOnAction(event -> {
+            //     setNodesPane.deleteAllNodes();
+            //     });
+            // }
+          
+           
+            // setNodesPane.setPrefSize(setNode.getPrefWidth(), setNode.getPrefHeight());
+    
+            // setNode.getChildren().add(setNodesPane);
+    
+            primaryStage.setResizable(false);
+    
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void draw(){
+        setNodesPane.getChildren().add(new Circle(200,200,100));
+    }
+    
+    public void printSth(){
+        System.out.println("aaaaaaa");
     }
 
     public String getStatus(){
-        return graphPanel.getStatus();
+        return setNodesPane.getStatus();
     }
 
     public setNodes getGraphPanel(){
-        return this.graphPanel;
+        return setNodesPane;
     }
 
     public Graph getGraph(){
-        return this.graphPanel.getGraph();
+        return this.setNodesPane.getGraph();
     }
 
     public void setGraph(Graph graph){
-        this.graphPanel.SetGraph(graph);
+        this.setNodesPane.SetGraph(graph);
     }
 
     public void displayForm(){
-         this.setVisible(true);
-    }
-
-    //Hàm để khởi tạo các giá trị thuộc tính của frame
-    public void setFormProperties(){
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 600);
-    }
-
-    // Khởi tạo cửa sổ JFrame
-    public InputForm() {
-        this.setFormProperties();
-
-        clrButton = new JButton("Xóa");
-        graphPanel = new setNodes();
-        graphPanel.setBackground(new Color(255, 255, 255));
-
-        clrButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                graphPanel.clearAllNodes();
-            }
+       Platform.runLater(() -> {
+            start(new Stage());
         });
-
-        graphPanel.addMouseClickListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e){
-              
-                    text.setText(graphPanel.getStatus());
-                
-                
-            }
-        });
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.add(clrButton);
-        text.setHorizontalAlignment(SwingConstants.LEFT);
-        buttonPanel.add(text);
-
-        getContentPane().add(buttonPanel, BorderLayout.NORTH);
-        getContentPane().add(graphPanel);
-        graphPanel.setLayout(null);
-
-        textArea.setBounds(592, 23, 184, 123);
-        graphPanel.add(textArea);
     }
 
-    
-    //CÁC HÀM LẮNG NGHE SỰ KIỆN CỦA FRAME(SỰ KIỆN SẼ ĐƯỢC XỬ LÍ BÊN CLIENTCONTROLLER)
+     //CÁC HÀM LẮNG NGHE SỰ KIỆN CỦA FRAME(SỰ KIỆN SẼ ĐƯỢC XỬ LÍ BÊN CLIENTCONTROLLER)
 
     //listener cho sự kiện click chuột
-    public void addMouseClickListener(MouseAdapter adapter){
-        this.graphPanel.addMouseClickListener(adapter);
+    public void addMouseClickListener(javafx.event.EventHandler<javafx.scene.input.MouseEvent> event){
+        this.setNodesPane.addMouseClickListener(event);
     }
 
-    //listener cho sự kiện nhấn nút confirm
-    public void addConfirmButtonListener(ActionListener listener){
-        this.graphPanel.addConfirmButtonListener(listener);
-    }
 
-    //listener cho sự kiện nhấn nút random
-    public void addRandomButtonListener(ActionListener listener){
-        this.graphPanel.addConfirmButtonListener(listener);
-    }
+    public static void main(String[] args){
+       launch(args);
 
-    //listener cho sự kiện nhấn nút xóa
-    public void addClearButtonListener(ActionListener listener){
-        this.clrButton.addActionListener(listener);
+            
     }
-
-    //listener chung cho các button của form
-    public void addGeneralButtonListener(ActionListener listener){
-        this.graphPanel.addGeneralButtonListener(listener);
-        this.clrButton.addActionListener(listener);
-    }
+    
     
 }
 

@@ -1,64 +1,112 @@
 package Client.Controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import Client.Client;
-import Client.View.InputForm;
+import Client.View.setNodes;
 import Shared.Helper.StringExcute;
 import Shared.Model.DataExchangeModel;
 import Shared.Model.Graph;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 
 
 //Controller de tuong tac giua CLientView va CLientModel và gửi dữ liệu đến Client
-public class ClientController {
+public class ClientController implements Initializable{
+    
+    @FXML
+    private Button deleteButton;
+    
+    @FXML
+    private Button confirmButton;
+
+    @FXML
+    private Pane setNode;
+    
+    private setNodes setNodesPane;
+    
     private DataExchangeModel dataExchangeModel;
-    private InputForm clientView;
     private Client client;
+    private static StringExcute stringHelper;
 
-    private static StringExcute stringHelper = new StringExcute();
+    private static OutputGraphController outCon;
 
-    public static void main(String[] args){
-        DataExchangeModel model = new DataExchangeModel();
-        InputForm view = new InputForm();
-        Client client = new Client("localhost", 2708);
+    private Scene outputScene;
 
-        ClientController controller = new ClientController(model, view, client);
-        controller.DisplayInputForm();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+         setNodesPane = new setNodes();
+         dataExchangeModel = new DataExchangeModel();
+         
+         setNodesPane.setPrefSize(setNode.getPrefWidth(), setNode.getPrefHeight());
+         
+         setNode.getChildren().add(setNodesPane);
+
+         setNodesPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            mousePressed();
+         });
+
+         deleteButton.setOnAction(event -> {
+            System.out.println("DELETE BUTTON CLICKED");
+         });
+
+         confirmButton.setOnAction(event -> confirmButtonClicked());
+         
+         client = new Client("localhost", 2708, this);
+         stringHelper = new StringExcute();
+
+         client.run();
     }
 
+    @FXML
+    private void confirmButtonClicked() {
+        System.out.println("CONFIRM BUTTON CLICKED");
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene/OutputGraphScene.fxml"));
+    
+            Parent root = loader.load();
 
-    //CONSTRUCTOR
-    public ClientController(DataExchangeModel model, InputForm view, Client client){
-        this.dataExchangeModel = model;
-        this.clientView = view;
-        this.client = client;
+            outCon = loader.<OutputGraphController>getController();
 
-        //thêm sự kiện vào view
-        clientView.addMouseClickListener(new ClickListner());
-        clientView.addGeneralButtonListener(new ButtonListener());
+            outputScene = new Scene(root);
+
+            Platform.runLater(() -> {
+                Stage stage = new Stage();
+                stage.setScene(outputScene);
+
+                stage.show();
+            });
+
+            outCon.setGraph(setNodesPane.getGraph());
+            
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
-
-    //hiện view
-    public void DisplayInputForm(){
-        this.clientView.displayForm();
-    }
-
-    //lấy dữ liệu từ view (graph)
-    public void RetrieveGraphFromView(Graph graph){
-        this.dataExchangeModel.setGraphData(graph);
-    }
-
-    //update view
-    public void UpdateView(){
-        this.clientView.setGraph(dataExchangeModel.getGraphData());
-    }
+    
 
     //trả dữ liệu về view
     public void SetGraphToView(Graph graph){
-        this.clientView.setGraph(graph);
+        Platform.runLater(() -> {
+
+            setNodesPane.SetGraph(graph);
+        });
     }
 
     //cập nhật dữ liệu của model 
@@ -79,27 +127,19 @@ public class ClientController {
 
 //=====================================================
     //EVENT HANDLER
-    class ClickListner extends MouseAdapter{
-        @Override
-        public void mousePressed(MouseEvent e){
-            dataExchangeModel.setGraphData(clientView.getGraph());
-            //gửi dữ liệu đến server
-            String messageToSend = clientView.getStatus();
 
-            if(!messageToSend.equals("")){
-                client.SendDataToServer(clientView.getStatus());
-            }
+    public void mousePressed(){
+        dataExchangeModel.setGraphData(setNodesPane.getGraph());
+        //gửi dữ liệu đến server
+        String messageToSend = setNodesPane.getStatus();
 
+        if(!messageToSend.equals("")){
+            client.SendDataToServer(setNodesPane.getStatus());
         }
+
     }
 
-    class ButtonListener implements ActionListener{
-        @Override
-        public void actionPerformed(ActionEvent e){
-            //gửi dữ liệu đến server
-            client.SendDataToServer(clientView.getStatus());
 
-        }
-    }
+ 
     
 }

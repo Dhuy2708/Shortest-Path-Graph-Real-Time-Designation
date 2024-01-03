@@ -40,8 +40,8 @@ public class Graph implements Serializable{
         this.addNode(from);
         if(!adjacencyList.get(from).containsKey(to))
             adjacencyList.get(from).put(to, weight);
-        if(!adjacencyList.get(to).containsKey(from))
-            adjacencyList.get(to).put(from,weight);
+        // if(!adjacencyList.get(to).containsKey(from))
+        //     adjacencyList.get(to).put(from,weight);
 
     }
 

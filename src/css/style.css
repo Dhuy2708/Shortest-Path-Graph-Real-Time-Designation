@@ -1,0 +1,26 @@
+.pane-with-border {
+    -fx-border-color: BLACK; /* Màu border (ví dụ: xanh da trời) */
+    -fx-border-width: 1px;    /* Độ rộng border */
+    -fx-border-style: solid;  /* Kiểu border */
+    -fx-background-color: #ecf0f1; /* Màu nền (ví dụ: màu xám nhạt) */
+    -fx-padding: 10px; /* Khoảng cách từ nội dung đến border */
+    -fx-border-radius: 10px; /* Bo tròn góc border */
+}
+
+.toolbar-with-border {
+    -fx-border-color: #e74c3c; /* Màu border (ví dụ: đỏ) */
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-background-color: #f5b7b1; /* Màu nền (ví dụ: màu hồng) */
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+}
+
+.vbox-with-border {
+    -fx-border-color: #2ecc71; /* Màu border (ví dụ: xanh lá cây) */
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-background-color: #a9dfbf; /* Màu nền (ví dụ: màu xanh nhạt) */
+    -fx-padding: 10px;
+    -fx-border-radius: 10px;
+}

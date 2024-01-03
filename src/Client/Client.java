@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.*;
+import java.lang.ModuleLayer.Controller;
 import java.net.Socket;
 
 
@@ -12,26 +13,28 @@ import Shared.Model.DataExchangeModel;
 public class Client {
     private Socket socket;
 
-    private static final int port = 2708;
+    private String serverAddress;
+
+    private int port = 2708;
 
     private PrintWriter out;
     private BufferedReader in;
 
     private ClientController controller;
 
-    public static void main(String[] args) {
-        Client client = new Client("localhost", port);
+
+    public Client(String serverAddress, int serverPort, ClientController controller) {
+        this.serverAddress = serverAddress;
+        this.port = serverPort;
+        this.controller = controller;
     }
 
-    public Client(String serverAddress, int serverPort) {
+    public void run(){
         try {
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(serverAddress, port);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-
-            this.controller = new ClientController(new DataExchangeModel(), new InputForm(), this);
-            this.controller.DisplayInputForm();
 
             this.ListeningFromServer();
         } catch (IOException | ClassNotFoundException e) {
